@@ -1,0 +1,16 @@
+<section class="page">
+  <h2>🔒 Access denied</h2>
+  <p class="hint">This page is restricted to the registry's <strong>super admin</strong>.</p>
+
+  <div class="status err">
+    Your account <code>{{ auth.email() }}</code> is signed in as a regular user.
+    <br /><br />
+    Only the super admin can register, amend, or transfer property records.
+    Sign out and create or sign in with the admin account.
+  </div>
+
+  <p class="hint">
+    Anyone signed in can still use <a routerLink="/verify">Verify</a> and
+    <a routerLink="/history">History</a>.
+  </p>
+</section>

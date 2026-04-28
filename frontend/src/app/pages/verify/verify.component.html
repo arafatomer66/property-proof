@@ -1,0 +1,31 @@
+<section class="page">
+  <h2>Verify a document</h2>
+  <p class="hint">Drop a PDF, enter the property ID, and the app will hash the file locally and ask the contract whether the hash matches.</p>
+
+  <label class="field">
+    <span>Property ID</span>
+    <input type="text" [(ngModel)]="propertyId" placeholder="e.g. PLOT-001" />
+  </label>
+
+  <label class="field">
+    <span>Document to verify</span>
+    <input type="file" (change)="onFileChange($event)" />
+  </label>
+
+  @if (fileName()) {
+    <div class="hash-row">
+      <strong>{{ fileName() }}</strong>
+      <code>{{ hash() ?? 'hashing…' }}</code>
+    </div>
+  }
+
+  <button (click)="runVerify()" [disabled]="busy() || !hash() || !propertyId">
+    {{ busy() ? 'Checking…' : 'Verify' }}
+  </button>
+
+  @if (verdict(); as v) {
+    <div class="status" [class.ok]="v.kind === 'ok'" [class.err]="v.kind === 'err'" [class.warn]="v.kind === 'warn'">
+      {{ v.msg }}
+    </div>
+  }
+</section>

@@ -1,0 +1,24 @@
+<section class="page">
+  <h2>Transfer ownership <span class="admin-badge">Admin only</span></h2>
+  <p class="hint">Update the recorded real-world owner of this property. Only the super admin can perform this action.</p>
+
+  <label class="field">
+    <span>Property ID</span>
+    <input type="text" [(ngModel)]="propertyId" placeholder="e.g. PLOT-001" />
+  </label>
+
+  <label class="field">
+    <span>New owner address</span>
+    <input type="text" [(ngModel)]="newOwner" placeholder="0x…" />
+  </label>
+
+  <button (click)="submit()" [disabled]="busy() || !propertyId || !newOwner">
+    {{ busy() ? 'Working…' : 'Transfer ownership' }}
+  </button>
+
+  @if (status(); as s) {
+    <div class="status" [class.ok]="s.kind === 'ok'" [class.err]="s.kind === 'err'">
+      {{ s.msg }}
+    </div>
+  }
+</section>

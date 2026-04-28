@@ -1,0 +1,48 @@
+<section class="page">
+  <h2>Revision history</h2>
+  <p class="hint">View the complete, append-only chain of revisions for a property.</p>
+
+  <label class="field">
+    <span>Property ID</span>
+    <input type="text" [(ngModel)]="propertyId" placeholder="e.g. PLOT-001" />
+  </label>
+
+  <button (click)="load()" [disabled]="busy() || !propertyId">
+    {{ busy() ? 'Loading…' : 'Load history' }}
+  </button>
+
+  @if (error()) {
+    <div class="status err">{{ error() }}</div>
+  }
+
+  @if (currentOwner()) {
+    <div class="status ok">
+      Current owner: <code>{{ currentOwner() }}</code>
+    </div>
+  }
+
+  @if (history().length > 0) {
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Hash</th>
+          <th>Owner</th>
+          <th>Timestamp</th>
+          <th>Note</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (r of history(); track $index) {
+          <tr>
+            <td>{{ $index }}</td>
+            <td class="hash">{{ r.docHash }}</td>
+            <td class="addr">{{ r.owner }}</td>
+            <td>{{ formatDate(r.timestamp) }}</td>
+            <td>{{ r.note }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</section>

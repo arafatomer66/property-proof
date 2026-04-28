@@ -1,0 +1,36 @@
+<section class="page">
+  <h2>Amend a property document <span class="admin-badge">Admin only</span></h2>
+  <p class="hint">Append a new revision (mutation, correction, updated deed). Only the super admin can amend — the contract enforces this.</p>
+
+  <label class="field">
+    <span>Property ID</span>
+    <input type="text" [(ngModel)]="propertyId" placeholder="e.g. PLOT-001" />
+  </label>
+
+  <label class="field">
+    <span>Note</span>
+    <input type="text" [(ngModel)]="note" placeholder="e.g. Mutation 2026" />
+  </label>
+
+  <label class="field">
+    <span>New document</span>
+    <input type="file" (change)="onFileChange($event)" />
+  </label>
+
+  @if (fileName()) {
+    <div class="hash-row">
+      <strong>{{ fileName() }}</strong>
+      <code>{{ hash() ?? 'hashing…' }}</code>
+    </div>
+  }
+
+  <button (click)="submit()" [disabled]="busy() || !hash() || !propertyId">
+    {{ busy() ? 'Working…' : 'Submit amendment' }}
+  </button>
+
+  @if (status(); as s) {
+    <div class="status" [class.ok]="s.kind === 'ok'" [class.err]="s.kind === 'err'">
+      {{ s.msg }}
+    </div>
+  }
+</section>

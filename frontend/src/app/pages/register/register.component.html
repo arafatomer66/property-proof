@@ -1,0 +1,44 @@
+<section class="page">
+  <h2>Register a property <span class="admin-badge">Admin only</span></h2>
+  <p class="hint">Anchor a property document on-chain. The "recorded owner" is the wallet address that legally owns this property in the real world (often <em>not</em> the admin).</p>
+
+  <label class="field">
+    <span>Property ID</span>
+    <input type="text" [(ngModel)]="propertyId" placeholder="e.g. PLOT-001" />
+  </label>
+
+  <label class="field">
+    <span>Note</span>
+    <input type="text" [(ngModel)]="note" placeholder="e.g. Original deed" />
+  </label>
+
+  <label class="field">
+    <span>Recorded owner address</span>
+    <div class="row">
+      <input type="text" [(ngModel)]="recordedOwner" placeholder="0x… (the property's real-world owner)" />
+      <button type="button" class="ghost" (click)="useMyAddress()">Use my address</button>
+    </div>
+  </label>
+
+  <label class="field">
+    <span>Document (PDF or any file)</span>
+    <input type="file" (change)="onFileChange($event)" />
+  </label>
+
+  @if (fileName()) {
+    <div class="hash-row">
+      <strong>{{ fileName() }}</strong>
+      <code>{{ hash() ?? 'hashing…' }}</code>
+    </div>
+  }
+
+  <button (click)="submit()" [disabled]="busy() || !hash() || !propertyId || !recordedOwner">
+    {{ busy() ? 'Working…' : 'Register on-chain' }}
+  </button>
+
+  @if (status(); as s) {
+    <div class="status" [class.ok]="s.kind === 'ok'" [class.err]="s.kind === 'err'">
+      {{ s.msg }}
+    </div>
+  }
+</section>

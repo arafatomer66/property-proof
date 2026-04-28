@@ -1,0 +1,92 @@
+<section class="auth-page">
+  <div class="card">
+    <div class="brand">
+      <span class="logo">🏠</span>
+      <span>PropertyProof</span>
+    </div>
+
+    <div class="tabs">
+      <button
+        type="button"
+        [class.active]="mode() === 'signin'"
+        (click)="switchMode('signin')"
+      >
+        Sign in
+      </button>
+      <button
+        type="button"
+        [class.active]="mode() === 'signup'"
+        (click)="switchMode('signup')"
+      >
+        Create account
+      </button>
+    </div>
+
+    <h2>
+      @if (mode() === 'signin') {
+        Welcome back
+      } @else {
+        Create your account
+      }
+    </h2>
+    <p class="sub">
+      @if (mode() === 'signin') {
+        Sign in to verify property documents or manage the registry.
+      } @else {
+        We'll generate a wallet for you in your browser — no MetaMask required.
+      }
+    </p>
+
+    <form (submit)="submit(); $event.preventDefault()">
+      <label class="field">
+        <span>Email</span>
+        <input
+          type="email"
+          [(ngModel)]="email"
+          name="email"
+          placeholder="you@example.com"
+          autocomplete="email"
+        />
+      </label>
+
+      <label class="field">
+        <span>Password</span>
+        <input
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          placeholder="At least 6 characters"
+          autocomplete="current-password"
+        />
+      </label>
+
+      <button class="primary" [disabled]="busy()">
+        @if (busy()) {
+          Working…
+        } @else if (mode() === 'signin') {
+          Sign in
+        } @else {
+          Create account
+        }
+      </button>
+    </form>
+
+    @if (error(); as e) {
+      <div class="alert err">{{ e }}</div>
+    }
+    @if (hint(); as h) {
+      <div class="alert ok">{{ h }}</div>
+    }
+
+    <div class="dev-hint">
+      <strong>Local dev shortcut</strong>
+      <p>
+        Bootstrap the super admin account in one click — uses
+        <code>admin&#64;propertyproof.local</code> / <code>admin123</code>.
+      </p>
+      <button type="button" class="ghost" (click)="fillAdmin()">
+        Use admin credentials
+      </button>
+    </div>
+  </div>
+</section>

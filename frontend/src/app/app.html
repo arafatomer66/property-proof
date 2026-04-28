@@ -1,0 +1,48 @@
+@if (showChrome()) {
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">🏠</span>
+      <span>PropertyProof</span>
+    </div>
+
+    <nav class="links">
+      <a routerLink="/verify" routerLinkActive="active">Verify</a>
+      <a routerLink="/history" routerLinkActive="active">History</a>
+      @if (auth.isAdmin()) {
+        <a routerLink="/register" routerLinkActive="active">Register</a>
+        <a routerLink="/amend" routerLinkActive="active">Amend</a>
+        <a routerLink="/transfer" routerLinkActive="active">Transfer</a>
+      }
+    </nav>
+
+    <div class="wallet">
+      @if (auth.isAdmin()) {
+        <span class="badge admin">Super admin</span>
+      } @else {
+        <span class="badge guest">User</span>
+      }
+      <span class="email" title="{{ auth.email() }}">{{ auth.email() }}</span>
+      <span class="addr" title="{{ auth.address() }}">{{ short(auth.address()) }}</span>
+      <button class="ghost-btn" (click)="logout()" title="Sign out">Logout</button>
+    </div>
+  </header>
+
+  @if (auth.error()) {
+    <div class="topbar-error">
+      <span>{{ auth.error() }}</span>
+      <button class="dismiss" (click)="auth.clearError()" title="Dismiss">×</button>
+    </div>
+  }
+}
+
+<main>
+  <router-outlet />
+</main>
+
+@if (showChrome()) {
+  <footer>
+    <small>
+      Contract: <code>{{ contract.getContractAddress() }}</code> · chainId 31337 · local Hardhat
+    </small>
+  </footer>
+}
