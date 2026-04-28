@@ -1,5 +1,6 @@
 import { Injectable, computed, signal } from '@angular/core';
-import { ethers } from 'ethers';
+import { Contract, ethers } from 'ethers';
+import contractMeta from '../../assets/PropertyProof.json';
 
 const RPC_URL = 'http://127.0.0.1:8545';
 
@@ -13,6 +14,11 @@ const FAUCET_KEY =
 
 const STORAGE_KEY = 'propertyproof.accounts';
 const SESSION_KEY = 'propertyproof.session';
+const PENDING_LAWYER_KEY = 'propertyproof.pendingLawyer';
+
+const BACKEND_URL = 'http://localhost:4500';
+
+export type Role = 'admin' | 'lawyer' | 'lawyer-pending' | 'citizen';
 
 interface StoredAccount {
   email: string;
@@ -26,6 +32,8 @@ export class AuthService {
   private _wallet = signal<ethers.Wallet | null>(null);
   private _error = signal<string | null>(null);
   private _busy = signal<boolean>(false);
+  private _isLawyer = signal<boolean>(false);
+  private _hasPendingLawyerApp = signal<boolean>(false);
 
   readonly email = this._email.asReadonly();
   readonly error = this._error.asReadonly();
@@ -35,6 +43,16 @@ export class AuthService {
   readonly isAdmin = computed(() => {
     const e = this._email();
     return e !== null && ADMIN_EMAILS.includes(e);
+  });
+  readonly isLawyer = this._isLawyer.asReadonly();
+  readonly hasPendingLawyerApp = this._hasPendingLawyerApp.asReadonly();
+
+  readonly role = computed<Role>(() => {
+    if (!this.isLoggedIn()) return 'citizen';
+    if (this.isAdmin()) return 'admin';
+    if (this._isLawyer()) return 'lawyer';
+    if (this._hasPendingLawyerApp()) return 'lawyer-pending';
+    return 'citizen';
   });
 
   readonly provider = new ethers.JsonRpcProvider(RPC_URL);
@@ -78,7 +96,6 @@ export class AuthService {
       accounts.push(stored);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(accounts));
 
-      // Auto-fund non-admin accounts so they can pay gas
       if (!ADMIN_EMAILS.includes(email)) {
         await this.fundAccount(wallet.address);
       }
@@ -87,6 +104,7 @@ export class AuthService {
       this._wallet.set(connected);
       this._email.set(email);
       this.persistSession(email, password);
+      await this.refreshRole();
     } finally {
       this._busy.set(false);
     }
@@ -117,6 +135,7 @@ export class AuthService {
       this._wallet.set(wallet);
       this._email.set(email);
       this.persistSession(email, password);
+      await this.refreshRole();
     } catch (e: any) {
       if (e?.message?.includes('invalid password')) {
         throw new Error('Incorrect password.');
@@ -131,6 +150,8 @@ export class AuthService {
     this._wallet.set(null);
     this._email.set(null);
     this._error.set(null);
+    this._isLawyer.set(false);
+    this._hasPendingLawyerApp.set(false);
     sessionStorage.removeItem(SESSION_KEY);
   }
 
@@ -144,6 +165,39 @@ export class AuthService {
     return this.provider;
   }
 
+  async refreshRole(): Promise<void> {
+    const addr = this._wallet()?.address;
+    if (!addr) {
+      this._isLawyer.set(false);
+      this._hasPendingLawyerApp.set(false);
+      return;
+    }
+
+    try {
+      const c = new Contract(
+        (contractMeta as any).address,
+        (contractMeta as any).abi,
+        this.provider,
+      );
+      const isLawyer: boolean = await c['isLawyer'](addr);
+      this._isLawyer.set(isLawyer);
+    } catch {
+      this._isLawyer.set(false);
+    }
+
+    try {
+      const res = await fetch(
+        `${BACKEND_URL}/api/lawyer-applications/by-wallet/${addr}`,
+      );
+      if (res.ok) {
+        const apps: { status: string }[] = await res.json();
+        this._hasPendingLawyerApp.set(apps.some((a) => a.status === 'pending'));
+      }
+    } catch {
+      this._hasPendingLawyerApp.set(false);
+    }
+  }
+
   private loadAccounts(): StoredAccount[] {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -154,8 +208,6 @@ export class AuthService {
   }
 
   private persistSession(email: string, password: string): void {
-    // Stored only in sessionStorage (cleared on tab close).
-    // For a learning project / local dev only — do not ship as-is.
     sessionStorage.setItem(SESSION_KEY, JSON.stringify({ email, password }));
   }
 
@@ -180,8 +232,6 @@ export class AuthService {
       });
       await tx.wait();
     } catch (e: any) {
-      // Faucet failure shouldn't block signup — user can still log in,
-      // they just won't be able to pay gas. Surface it as a soft error.
       this._error.set(
         'Account created, but auto-funding failed. Is the Hardhat node running?',
       );

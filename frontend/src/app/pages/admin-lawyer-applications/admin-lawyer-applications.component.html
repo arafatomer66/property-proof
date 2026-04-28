@@ -1,0 +1,52 @@
+<section class="page wide">
+  <h2>Lawyer applications</h2>
+  <p class="hint">Approve to grant on-chain submission powers. Approval signs <code>grantLawyerRole</code>.</p>
+
+  @if (busy()) {
+    <div class="status">Loading…</div>
+  }
+  @if (error()) {
+    <div class="status err">{{ error() }}</div>
+  }
+
+  @if (apps().length === 0 && !busy()) {
+    <div class="status">No applications yet.</div>
+  }
+
+  @if (apps().length > 0) {
+    <div class="apps">
+      @for (a of apps(); track a.id) {
+        <div class="app-card">
+          <div class="app-head">
+            <strong>{{ a.fullName }}</strong>
+            <span class="badge" [class.pending]="a.status === 'pending'" [class.approved]="a.status === 'approved'" [class.rejected]="a.status === 'rejected'">
+              {{ a.status | uppercase }}
+            </span>
+          </div>
+          <div class="app-row"><span>Email</span><span>{{ a.email }}</span></div>
+          <div class="app-row"><span>Wallet</span><code>{{ a.walletAddress }}</code></div>
+          <div class="app-row"><span>Bar number</span><span>{{ a.barLicenseNumber }}</span></div>
+          <div class="app-row"><span>Jurisdiction</span><span>{{ a.jurisdiction }}</span></div>
+          @if (a.reason) {
+            <div class="app-row"><span>Reason</span><span class="reason">{{ a.reason }}</span></div>
+          }
+          <div class="app-row"><span>Submitted</span><span>{{ formatDate(a.submittedAt) }}</span></div>
+          @if (a.rejectReason) {
+            <div class="app-row"><span>Rejected</span><span>{{ a.rejectReason }}</span></div>
+          }
+
+          @if (a.status === 'pending') {
+            <div class="actions">
+              <button class="approve" (click)="approve(a)" [disabled]="workingId() === a.id">
+                {{ workingId() === a.id ? 'Working…' : 'Approve' }}
+              </button>
+              <button class="reject" (click)="reject(a)" [disabled]="workingId() === a.id">
+                Reject
+              </button>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</section>

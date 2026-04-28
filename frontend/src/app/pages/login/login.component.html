@@ -1,40 +1,13 @@
 <section class="auth-page">
   <div class="card">
-    <div class="brand">
+    <a routerLink="/" class="brand">
       <span class="logo">🏠</span>
       <span>PropertyProof</span>
-    </div>
+    </a>
 
-    <div class="tabs">
-      <button
-        type="button"
-        [class.active]="mode() === 'signin'"
-        (click)="switchMode('signin')"
-      >
-        Sign in
-      </button>
-      <button
-        type="button"
-        [class.active]="mode() === 'signup'"
-        (click)="switchMode('signup')"
-      >
-        Create account
-      </button>
-    </div>
-
-    <h2>
-      @if (mode() === 'signin') {
-        Welcome back
-      } @else {
-        Create your account
-      }
-    </h2>
+    <h2>Sign in</h2>
     <p class="sub">
-      @if (mode() === 'signin') {
-        Sign in to verify property documents or manage the registry.
-      } @else {
-        We'll generate a wallet for you in your browser — no MetaMask required.
-      }
+      Sign in to manage the registry, submit on behalf of clients, or check on your application.
     </p>
 
     <form (submit)="submit(); $event.preventDefault()">
@@ -61,22 +34,17 @@
       </label>
 
       <button class="primary" [disabled]="busy()">
-        @if (busy()) {
-          Working…
-        } @else if (mode() === 'signin') {
-          Sign in
-        } @else {
-          Create account
-        }
+        @if (busy()) { Working… } @else { Sign in }
       </button>
     </form>
 
     @if (error(); as e) {
       <div class="alert err">{{ e }}</div>
     }
-    @if (hint(); as h) {
-      <div class="alert ok">{{ h }}</div>
-    }
+
+    <p class="link-row">
+      Don't have an account? <a routerLink="/signup">Sign up</a>
+    </p>
 
     <div class="dev-hint">
       <strong>Local dev shortcut</strong>

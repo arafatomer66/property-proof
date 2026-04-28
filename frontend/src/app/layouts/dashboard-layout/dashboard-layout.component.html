@@ -1,0 +1,58 @@
+<div class="shell">
+  <aside class="sidebar">
+    <a routerLink="/" class="brand">
+      <span class="logo">🏠</span>
+      <span>PropertyProof</span>
+    </a>
+
+    @if (isAdmin()) {
+      <div class="group-label">Registrar</div>
+      <a routerLink="/admin" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Overview</a>
+      <a routerLink="/admin/lawyer-applications" routerLinkActive="active">Lawyer applications</a>
+      <a routerLink="/admin/pending-submissions" routerLinkActive="active">Pending submissions</a>
+      <a routerLink="/admin/register" routerLinkActive="active">Register property</a>
+      <a routerLink="/admin/amend" routerLinkActive="active">Amend property</a>
+      <a routerLink="/admin/transfer" routerLinkActive="active">Transfer ownership</a>
+    }
+
+    @if (isLawyer()) {
+      <div class="group-label">Lawyer</div>
+      <a routerLink="/lawyer" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">My submissions</a>
+      <a routerLink="/lawyer/submit-registration" routerLinkActive="active">Submit registration</a>
+      <a routerLink="/lawyer/submit-amendment" routerLinkActive="active">Submit amendment</a>
+    }
+
+    <div class="group-label">Public</div>
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Search</a>
+    <a routerLink="/verify" routerLinkActive="active">Verify</a>
+    <a routerLink="/history" routerLinkActive="active">History</a>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="role">
+        @if (isAdmin()) {
+          <span class="badge admin">Super admin</span>
+        } @else if (isLawyer()) {
+          <span class="badge lawyer">Lawyer</span>
+        } @else {
+          <span class="badge guest">User</span>
+        }
+        <span class="email">{{ auth.email() }}</span>
+        <span class="addr" title="{{ auth.address() }}">{{ short(auth.address()) }}</span>
+      </div>
+      <button class="ghost-btn" (click)="logout()">Logout</button>
+    </header>
+
+    @if (auth.error()) {
+      <div class="topbar-error">
+        <span>{{ auth.error() }}</span>
+        <button class="dismiss" (click)="auth.clearError()" title="Dismiss">×</button>
+      </div>
+    }
+
+    <main>
+      <router-outlet />
+    </main>
+  </div>
+</div>

@@ -26,6 +26,11 @@
   @if (verdict(); as v) {
     <div class="status" [class.ok]="v.kind === 'ok'" [class.err]="v.kind === 'err'" [class.warn]="v.kind === 'warn'">
       {{ v.msg }}
+      @if (v.kind !== 'err' && v.fileURL) {
+        <div class="file-link">
+          <a [href]="v.fileURL" target="_blank" rel="noopener">Download original file</a>
+        </div>
+      }
     </div>
   }
 </section>

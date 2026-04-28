@@ -1,12 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
@@ -14,22 +14,13 @@ export class LoginComponent {
   private auth = inject(AuthService);
   private router = inject(Router);
 
-  mode = signal<'signin' | 'signup'>('signin');
   email = '';
   password = '';
   busy = signal(false);
   error = signal<string | null>(null);
-  hint = signal<string | null>(null);
-
-  switchMode(m: 'signin' | 'signup') {
-    this.mode.set(m);
-    this.error.set(null);
-    this.hint.set(null);
-  }
 
   async submit() {
     this.error.set(null);
-    this.hint.set(null);
 
     if (!this.email || !this.password) {
       this.error.set('Email and password are required.');
@@ -38,15 +29,8 @@ export class LoginComponent {
 
     this.busy.set(true);
     try {
-      if (this.mode() === 'signup') {
-        await this.auth.signup(this.email, this.password);
-        if (this.auth.isAdmin()) {
-          this.hint.set('Welcome, super admin!');
-        }
-      } else {
-        await this.auth.login(this.email, this.password);
-      }
-      this.router.navigateByUrl('/verify');
+      await this.auth.login(this.email, this.password);
+      this.routeByRole();
     } catch (e: any) {
       this.error.set(e?.message ?? 'Something went wrong.');
     } finally {
@@ -57,6 +41,13 @@ export class LoginComponent {
   fillAdmin() {
     this.email = 'admin@propertyproof.local';
     this.password = 'admin123';
-    this.mode.set('signup');
+  }
+
+  private routeByRole() {
+    const r = this.auth.role();
+    if (r === 'admin') this.router.navigateByUrl('/admin');
+    else if (r === 'lawyer') this.router.navigateByUrl('/lawyer');
+    else if (r === 'lawyer-pending') this.router.navigateByUrl('/pending-approval');
+    else this.router.navigateByUrl('/');
   }
 }

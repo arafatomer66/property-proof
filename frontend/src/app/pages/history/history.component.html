@@ -27,9 +27,11 @@
         <tr>
           <th>#</th>
           <th>Hash</th>
-          <th>Owner</th>
+          <th>Recorded owner</th>
+          <th>Submitter</th>
           <th>Timestamp</th>
           <th>Note</th>
+          <th>File</th>
         </tr>
       </thead>
       <tbody>
@@ -37,9 +39,17 @@
           <tr>
             <td>{{ $index }}</td>
             <td class="hash">{{ r.docHash }}</td>
-            <td class="addr">{{ r.owner }}</td>
+            <td class="addr">{{ r.recordedOwner }}</td>
+            <td class="addr">{{ r.submitter }}</td>
             <td>{{ formatDate(r.timestamp) }}</td>
             <td>{{ r.note }}</td>
+            <td>
+              @if (r.fileURL) {
+                <a [href]="r.fileURL" target="_blank" rel="noopener">Download</a>
+              } @else {
+                <span class="muted">—</span>
+              }
+            </td>
           </tr>
         }
       </tbody>

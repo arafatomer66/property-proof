@@ -1,0 +1,40 @@
+<section class="hero">
+  <h1>A public, tamper-proof land registry</h1>
+  <p class="subtitle">
+    Every deed, mutation, and sale is anchored on-chain by a government registrar.
+    Anyone can verify a document, look up a property's full revision history, or audit
+    pending submissions. No login required.
+  </p>
+
+  <div class="search">
+    <input
+      type="text"
+      [(ngModel)]="query"
+      placeholder="Search property ID (e.g. PLOT-001)"
+      (keyup.enter)="search()"
+    />
+    <button (click)="search()">Search</button>
+  </div>
+
+  @if (error()) {
+    <div class="search-error">{{ error() }}</div>
+  }
+
+  <div class="quick-actions">
+    <a routerLink="/verify" class="card">
+      <span class="icon">🔍</span>
+      <strong>Verify a document</strong>
+      <small>Drop any PDF and check whether it matches the on-chain record.</small>
+    </a>
+    <a routerLink="/history" class="card">
+      <span class="icon">📜</span>
+      <strong>Browse history</strong>
+      <small>Look up the full append-only chain of revisions for any property.</small>
+    </a>
+    <a routerLink="/signup" class="card">
+      <span class="icon">⚖️</span>
+      <strong>Apply as a lawyer</strong>
+      <small>KYC'd lawyers can submit registrations on behalf of clients.</small>
+    </a>
+  </div>
+</section>

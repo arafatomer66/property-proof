@@ -1,0 +1,57 @@
+<section class="page wide">
+  <div class="header">
+    <a routerLink="/" class="back">← Search</a>
+    <h2>Property <code>{{ propertyId() }}</code></h2>
+  </div>
+
+  @if (busy()) {
+    <div class="status">Loading…</div>
+  }
+
+  @if (!busy() && error()) {
+    <div class="status err">{{ error() }}</div>
+  }
+
+  @if (!busy() && !isZeroAddress(currentOwner())) {
+    <div class="owner-card">
+      <span class="label">Current recorded owner</span>
+      <code>{{ currentOwner() }}</code>
+    </div>
+  }
+
+  @if (history().length > 0) {
+    <h3>Revision history</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Hash</th>
+          <th>Recorded owner</th>
+          <th>Submitter</th>
+          <th>Timestamp</th>
+          <th>Note</th>
+          <th>File</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (r of history(); track $index) {
+          <tr>
+            <td>{{ $index }}</td>
+            <td class="hash">{{ r.docHash }}</td>
+            <td class="addr">{{ r.recordedOwner }}</td>
+            <td class="addr">{{ r.submitter }}</td>
+            <td>{{ formatDate(r.timestamp) }}</td>
+            <td>{{ r.note }}</td>
+            <td>
+              @if (r.fileURL) {
+                <a [href]="r.fileURL" target="_blank" rel="noopener">Download</a>
+              } @else {
+                <span class="muted">—</span>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</section>

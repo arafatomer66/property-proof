@@ -1,0 +1,56 @@
+<section class="page wide">
+  <h2>Pending submissions</h2>
+  <p class="hint">Submissions filed by lawyers. Approve to write the revision on-chain.</p>
+
+  @if (busy()) {
+    <div class="status">Loading…</div>
+  }
+  @if (error()) {
+    <div class="status err">{{ error() }}</div>
+  }
+  @if (submissions().length === 0 && !busy()) {
+    <div class="status">No submissions yet.</div>
+  }
+
+  @if (submissions().length > 0) {
+    <div class="subs">
+      @for (s of submissions(); track s.id) {
+        <div class="sub-card" [class.dim]="s.status !== 'PENDING'">
+          <div class="head">
+            <span class="kind">{{ s.kind }}</span>
+            <span class="prop">{{ s.propertyId }}</span>
+            <span class="badge" [class.pending]="s.status === 'PENDING'" [class.approved]="s.status === 'APPROVED'" [class.rejected]="s.status === 'REJECTED'">
+              {{ s.status }}
+            </span>
+          </div>
+          <div class="row"><span>Hash</span><code class="hash">{{ s.docHash }}</code></div>
+          @if (s.kind === 'REGISTER') {
+            <div class="row"><span>Recorded owner</span><code>{{ s.recordedOwner }}</code></div>
+          }
+          <div class="row"><span>Submitted by</span><code>{{ short(s.submittedBy) }}</code></div>
+          <div class="row"><span>Submitted at</span><span>{{ formatDate(s.submittedAt) }}</span></div>
+          @if (s.note) {
+            <div class="row"><span>Note</span><span>{{ s.note }}</span></div>
+          }
+          @if (s.fileURL) {
+            <div class="row"><span>File</span><a [href]="s.fileURL" target="_blank" rel="noopener">Download</a></div>
+          }
+          @if (s.rejectReason) {
+            <div class="row"><span>Reject reason</span><span>{{ s.rejectReason }}</span></div>
+          }
+
+          @if (s.status === 'PENDING') {
+            <div class="actions">
+              <button class="approve" (click)="approve(s)" [disabled]="workingId() === s.id">
+                {{ workingId() === s.id ? 'Working…' : 'Approve' }}
+              </button>
+              <button class="reject" (click)="reject(s)" [disabled]="workingId() === s.id">
+                Reject
+              </button>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</section>

@@ -1,0 +1,107 @@
+@use '../../shared/page.scss';
+
+.page.wide {
+  max-width: 960px;
+}
+
+.subs {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sub-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 1.1rem 1.3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.sub-card.dim {
+  opacity: 0.7;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.4rem;
+}
+
+.kind {
+  background: #1d4ed8;
+  color: white;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+}
+
+.prop {
+  font-weight: 600;
+  font-size: 1.05rem;
+  flex: 1;
+}
+
+.badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+}
+
+.badge.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.badge.approved {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.badge.rejected {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.88rem;
+  border-bottom: 1px solid #f3f4f6;
+  padding-bottom: 0.4rem;
+}
+
+.row span:first-child {
+  color: #6b7280;
+  font-weight: 500;
+  min-width: 130px;
+}
+
+code {
+  font-family: ui-monospace, Menlo, monospace;
+  word-break: break-all;
+}
+
+code.hash {
+  font-size: 0.78rem;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+button.approve {
+  background: #16a34a;
+}
+
+button.reject {
+  background: #dc2626;
+}

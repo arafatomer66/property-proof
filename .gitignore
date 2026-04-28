@@ -8,3 +8,7 @@ dist
 frontend/node_modules
 frontend/dist
 frontend/.angular
+backend/node_modules
+backend/dist
+backend/uploads
+backend/data/lawyer-apps.json

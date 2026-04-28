@@ -1,0 +1,87 @@
+<section class="auth-page">
+  <div class="card">
+    <a routerLink="/" class="brand">
+      <span class="logo">🏠</span>
+      <span>PropertyProof</span>
+    </a>
+
+    <h2>Create your account</h2>
+    <p class="sub">
+      Pick how you'll use PropertyProof. We generate a wallet for you in your browser.
+    </p>
+
+    <div class="tabs">
+      <button
+        type="button"
+        [class.active]="role() === 'citizen'"
+        (click)="switchRole('citizen')"
+      >
+        Citizen
+      </button>
+      <button
+        type="button"
+        [class.active]="role() === 'lawyer'"
+        (click)="switchRole('lawyer')"
+      >
+        Lawyer
+      </button>
+    </div>
+
+    <form (submit)="submit(); $event.preventDefault()">
+      <label class="field">
+        <span>Email</span>
+        <input type="email" [(ngModel)]="email" name="email" autocomplete="email" />
+      </label>
+
+      <label class="field">
+        <span>Password</span>
+        <input
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          placeholder="At least 6 characters"
+          autocomplete="new-password"
+        />
+      </label>
+
+      @if (role() === 'lawyer') {
+        <label class="field">
+          <span>Full name</span>
+          <input type="text" [(ngModel)]="fullName" name="fullName" />
+        </label>
+
+        <label class="field">
+          <span>Bar license number</span>
+          <input type="text" [(ngModel)]="barLicenseNumber" name="barLicenseNumber" />
+        </label>
+
+        <label class="field">
+          <span>Jurisdiction</span>
+          <input type="text" [(ngModel)]="jurisdiction" name="jurisdiction" placeholder="e.g. Dhaka, Bangladesh" />
+        </label>
+
+        <label class="field">
+          <span>Why should the registrar approve you?</span>
+          <textarea [(ngModel)]="reason" name="reason" rows="3"></textarea>
+        </label>
+
+        <p class="lawyer-note">
+          The registrar will review your application. You'll start with a wallet
+          but won't be able to submit registrations until approved.
+        </p>
+      }
+
+      <button class="primary" [disabled]="busy()">
+        @if (busy()) { Working… } @else if (role() === 'lawyer') { Submit application } @else { Create account }
+      </button>
+    </form>
+
+    @if (error(); as e) {
+      <div class="alert err">{{ e }}</div>
+    }
+
+    <p class="link-row">
+      Already have an account? <a routerLink="/login">Sign in</a>
+    </p>
+  </div>
+</section>

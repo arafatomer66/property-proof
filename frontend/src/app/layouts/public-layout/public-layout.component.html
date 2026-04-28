@@ -1,0 +1,38 @@
+<header class="topbar">
+  <a routerLink="/" class="brand">
+    <span class="logo">🏠</span>
+    <span>PropertyProof</span>
+  </a>
+
+  <nav class="links">
+    <a routerLink="/">Search</a>
+    <a routerLink="/verify">Verify</a>
+    <a routerLink="/history">History</a>
+  </nav>
+
+  <div class="cta">
+    @if (!auth.isLoggedIn()) {
+      <a routerLink="/login" class="ghost-btn">Login</a>
+      <a routerLink="/signup" class="primary-btn">Sign up</a>
+    } @else {
+      <span class="email">{{ auth.email() }}</span>
+      <button class="ghost-btn" (click)="goToDashboard()">Dashboard</button>
+      <button class="ghost-btn" (click)="logout()">Logout</button>
+    }
+  </div>
+</header>
+
+@if (auth.error()) {
+  <div class="topbar-error">
+    <span>{{ auth.error() }}</span>
+    <button class="dismiss" (click)="auth.clearError()" title="Dismiss">×</button>
+  </div>
+}
+
+<main>
+  <router-outlet />
+</main>
+
+<footer>
+  <small>PropertyProof · public land registry · chainId 31337 · local Hardhat</small>
+</footer>

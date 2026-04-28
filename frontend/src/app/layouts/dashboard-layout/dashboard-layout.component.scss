@@ -1,0 +1,154 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #f8fafc;
+}
+
+.shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 240px;
+  background: #0f172a;
+  color: #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem 0.75rem;
+  gap: 0.25rem;
+}
+
+.sidebar .brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem 0.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.sidebar .group-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748b;
+  padding: 0.75rem 0.6rem 0.25rem;
+}
+
+.sidebar a {
+  color: #cbd5e1;
+  text-decoration: none;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.92rem;
+}
+
+.sidebar a:hover {
+  background: #1e293b;
+  color: white;
+}
+
+.sidebar a.active {
+  background: #1d4ed8;
+  color: white;
+  font-weight: 600;
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.5rem;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.role {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.badge.admin {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.badge.lawyer {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.badge.guest {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.email {
+  font-size: 0.85rem;
+  color: #374151;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.addr {
+  font-family: ui-monospace, Menlo, monospace;
+  background: #f3f4f6;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+
+.ghost-btn {
+  background: transparent;
+  color: #4b5563;
+  border: 1px solid #d1d5db;
+  padding: 0.45rem 0.9rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.topbar-error {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 0.6rem 1.5rem;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.topbar-error .dismiss {
+  background: transparent;
+  border: 0;
+  color: #991b1b;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+main {
+  flex: 1;
+  padding: 1rem 0;
+}

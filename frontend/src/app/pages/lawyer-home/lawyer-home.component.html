@@ -1,0 +1,45 @@
+<section class="page wide">
+  <h2>My submissions</h2>
+  <p class="hint">Track the status of registrations and amendments you've filed with the registrar.</p>
+
+  <div class="quick-row">
+    <a routerLink="/lawyer/submit-registration" class="primary">+ Submit registration</a>
+    <a routerLink="/lawyer/submit-amendment" class="secondary">+ Submit amendment</a>
+  </div>
+
+  @if (busy()) {
+    <div class="status">Loading…</div>
+  }
+  @if (error()) {
+    <div class="status err">{{ error() }}</div>
+  }
+  @if (!busy() && mine().length === 0) {
+    <div class="status">You haven't submitted anything yet.</div>
+  }
+
+  @if (mine().length > 0) {
+    <div class="subs">
+      @for (s of mine(); track s.id) {
+        <div class="sub-card">
+          <div class="head">
+            <span class="kind">{{ s.kind }}</span>
+            <span class="prop">{{ s.propertyId }}</span>
+            <span class="badge" [class.pending]="s.status === 'PENDING'" [class.approved]="s.status === 'APPROVED'" [class.rejected]="s.status === 'REJECTED'">
+              {{ s.status }}
+            </span>
+          </div>
+          <div class="row"><span>Submitted</span><span>{{ formatDate(s.submittedAt) }}</span></div>
+          @if (s.note) {
+            <div class="row"><span>Note</span><span>{{ s.note }}</span></div>
+          }
+          @if (s.fileURL) {
+            <div class="row"><span>File</span><a [href]="s.fileURL" target="_blank" rel="noopener">Download</a></div>
+          }
+          @if (s.rejectReason) {
+            <div class="row reject"><span>Reject reason</span><span>{{ s.rejectReason }}</span></div>
+          }
+        </div>
+      }
+    </div>
+  }
+</section>

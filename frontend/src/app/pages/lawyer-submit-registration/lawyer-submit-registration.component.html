@@ -1,0 +1,41 @@
+<section class="page">
+  <h2>Submit registration <span class="lawyer-badge">Lawyer</span></h2>
+  <p class="hint">Submit a new property registration for the registrar to approve. The file is uploaded to the backend and the SHA-256 hash is anchored on-chain.</p>
+
+  <label class="field">
+    <span>Property ID</span>
+    <input type="text" [(ngModel)]="propertyId" placeholder="e.g. PLOT-002" />
+  </label>
+
+  <label class="field">
+    <span>Note</span>
+    <input type="text" [(ngModel)]="note" placeholder="e.g. Original deed, drafted by …" />
+  </label>
+
+  <label class="field">
+    <span>Recorded owner address</span>
+    <input type="text" [(ngModel)]="recordedOwner" placeholder="0x… (the property's real-world owner)" />
+  </label>
+
+  <label class="field">
+    <span>Document</span>
+    <input type="file" (change)="onFileChange($event)" />
+  </label>
+
+  @if (fileName()) {
+    <div class="hash-row">
+      <strong>{{ fileName() }}</strong>
+      <code>{{ hash() ?? 'hashing…' }}</code>
+    </div>
+  }
+
+  <button (click)="submit()" [disabled]="busy() || !hash() || !propertyId || !recordedOwner">
+    {{ busy() ? 'Working…' : 'Submit for review' }}
+  </button>
+
+  @if (status(); as s) {
+    <div class="status" [class.ok]="s.kind === 'ok'" [class.err]="s.kind === 'err'">
+      {{ s.msg }}
+    </div>
+  }
+</section>

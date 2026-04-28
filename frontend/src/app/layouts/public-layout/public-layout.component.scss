@@ -1,0 +1,116 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #f8fafc;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.75rem 1.5rem;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  text-decoration: none;
+  color: inherit;
+}
+
+.brand .logo {
+  font-size: 1.2rem;
+}
+
+.links {
+  display: flex;
+  gap: 1rem;
+  flex: 1;
+}
+
+.links a {
+  color: #4b5563;
+  text-decoration: none;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.links a:hover {
+  background: #eef2ff;
+  color: #1d4ed8;
+}
+
+.cta {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.cta .email {
+  font-size: 0.85rem;
+  color: #374151;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.primary-btn,
+.ghost-btn {
+  padding: 0.45rem 0.9rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.primary-btn {
+  background: #1d4ed8;
+  color: white;
+  border: 0;
+}
+
+.ghost-btn {
+  background: transparent;
+  color: #1d4ed8;
+  border: 1px solid #d1d5db;
+}
+
+.topbar-error {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 0.6rem 1.5rem;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.topbar-error .dismiss {
+  background: transparent;
+  border: 0;
+  color: #991b1b;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+main {
+  min-height: calc(100vh - 130px);
+}
+
+footer {
+  padding: 1rem 1.5rem;
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.8rem;
+  border-top: 1px solid #e5e7eb;
+  background: white;
+}

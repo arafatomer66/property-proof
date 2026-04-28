@@ -1,5 +1,5 @@
 {
-  "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+  "address": "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
   "abi": [
     {
       "inputs": [],
@@ -23,6 +23,32 @@
         }
       ],
       "name": "AdminTransferred",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "lawyer",
+          "type": "address"
+        }
+      ],
+      "name": "LawyerGranted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "lawyer",
+          "type": "address"
+        }
+      ],
+      "name": "LawyerRevoked",
       "type": "event"
     },
     {
@@ -67,15 +93,15 @@
         },
         {
           "indexed": false,
-          "internalType": "address",
-          "name": "owner",
-          "type": "address"
-        },
-        {
-          "indexed": false,
           "internalType": "uint256",
           "name": "revisionIndex",
           "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "submitter",
+          "type": "address"
         }
       ],
       "name": "PropertyAmended",
@@ -99,11 +125,80 @@
         {
           "indexed": false,
           "internalType": "address",
-          "name": "owner",
+          "name": "recordedOwner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "submitter",
           "type": "address"
         }
       ],
       "name": "PropertyRegistered",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        }
+      ],
+      "name": "SubmissionApproved",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "enum PropertyProof.SubmissionKind",
+          "name": "kind",
+          "type": "uint8"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "submittedBy",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "propertyId",
+          "type": "string"
+        }
+      ],
+      "name": "SubmissionFiled",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "reason",
+          "type": "string"
+        }
+      ],
+      "name": "SubmissionRejected",
       "type": "event"
     },
     {
@@ -122,9 +217,27 @@
           "internalType": "string",
           "name": "note",
           "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "fileURL",
+          "type": "string"
         }
       ],
       "name": "amendProperty",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        }
+      ],
+      "name": "approvePending",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -167,7 +280,7 @@
             },
             {
               "internalType": "address",
-              "name": "owner",
+              "name": "recordedOwner",
               "type": "address"
             },
             {
@@ -179,11 +292,202 @@
               "internalType": "string",
               "name": "note",
               "type": "string"
+            },
+            {
+              "internalType": "address",
+              "name": "submitter",
+              "type": "address"
+            },
+            {
+              "internalType": "string",
+              "name": "fileURL",
+              "type": "string"
             }
           ],
           "internalType": "struct PropertyProof.Revision[]",
           "name": "",
           "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        }
+      ],
+      "name": "getPending",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "enum PropertyProof.SubmissionKind",
+              "name": "kind",
+              "type": "uint8"
+            },
+            {
+              "internalType": "string",
+              "name": "propertyId",
+              "type": "string"
+            },
+            {
+              "internalType": "bytes32",
+              "name": "docHash",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "string",
+              "name": "note",
+              "type": "string"
+            },
+            {
+              "internalType": "address",
+              "name": "recordedOwner",
+              "type": "address"
+            },
+            {
+              "internalType": "string",
+              "name": "fileURL",
+              "type": "string"
+            },
+            {
+              "internalType": "address",
+              "name": "submittedBy",
+              "type": "address"
+            },
+            {
+              "internalType": "uint64",
+              "name": "submittedAt",
+              "type": "uint64"
+            },
+            {
+              "internalType": "enum PropertyProof.SubmissionStatus",
+              "name": "status",
+              "type": "uint8"
+            },
+            {
+              "internalType": "string",
+              "name": "rejectReason",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct PropertyProof.PendingSubmission",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPendingSubmissions",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "enum PropertyProof.SubmissionKind",
+              "name": "kind",
+              "type": "uint8"
+            },
+            {
+              "internalType": "string",
+              "name": "propertyId",
+              "type": "string"
+            },
+            {
+              "internalType": "bytes32",
+              "name": "docHash",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "string",
+              "name": "note",
+              "type": "string"
+            },
+            {
+              "internalType": "address",
+              "name": "recordedOwner",
+              "type": "address"
+            },
+            {
+              "internalType": "string",
+              "name": "fileURL",
+              "type": "string"
+            },
+            {
+              "internalType": "address",
+              "name": "submittedBy",
+              "type": "address"
+            },
+            {
+              "internalType": "uint64",
+              "name": "submittedAt",
+              "type": "uint64"
+            },
+            {
+              "internalType": "enum PropertyProof.SubmissionStatus",
+              "name": "status",
+              "type": "uint8"
+            },
+            {
+              "internalType": "string",
+              "name": "rejectReason",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct PropertyProof.PendingSubmission[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "lawyer",
+          "type": "address"
+        }
+      ],
+      "name": "grantLawyerRole",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "isLawyer",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "pendingCount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
         }
       ],
       "stateMutability": "view",
@@ -210,9 +514,32 @@
           "internalType": "address",
           "name": "recordedOwner",
           "type": "address"
+        },
+        {
+          "internalType": "string",
+          "name": "fileURL",
+          "type": "string"
         }
       ],
       "name": "registerProperty",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "reason",
+          "type": "string"
+        }
+      ],
+      "name": "rejectPending",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -234,6 +561,92 @@
         }
       ],
       "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "lawyer",
+          "type": "address"
+        }
+      ],
+      "name": "revokeLawyerRole",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "propertyId",
+          "type": "string"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "docHash",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "string",
+          "name": "note",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "fileURL",
+          "type": "string"
+        }
+      ],
+      "name": "submitAmendment",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "propertyId",
+          "type": "string"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "docHash",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "string",
+          "name": "note",
+          "type": "string"
+        },
+        {
+          "internalType": "address",
+          "name": "recordedOwner",
+          "type": "address"
+        },
+        {
+          "internalType": "string",
+          "name": "fileURL",
+          "type": "string"
+        }
+      ],
+      "name": "submitRegistration",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
       "type": "function"
     },
     {

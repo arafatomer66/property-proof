@@ -4,8 +4,8 @@ import { HashService } from '../../services/hash.service';
 import { ContractService } from '../../services/contract.service';
 
 type Verdict =
-  | { kind: 'ok'; msg: string }
-  | { kind: 'warn'; msg: string }
+  | { kind: 'ok'; msg: string; fileURL?: string }
+  | { kind: 'warn'; msg: string; fileURL?: string }
   | { kind: 'err'; msg: string };
 
 @Component({
@@ -51,10 +51,14 @@ export class VerifyComponent {
       const r = await this.contractService.verify(this.propertyId, this.hash()!);
       if (!r.exists) {
         this.verdict.set({ kind: 'err', msg: 'NOT FOUND — this hash is not registered for that property. Either tampered, wrong file, or unregistered.' });
-      } else if (r.isCurrent) {
-        this.verdict.set({ kind: 'ok', msg: `AUTHENTIC & CURRENT — matches revision #${r.revisionIndex}, the latest.` });
       } else {
-        this.verdict.set({ kind: 'warn', msg: `OUTDATED — matches revision #${r.revisionIndex}, but a newer revision exists. Get the latest version.` });
+        const history = await this.contractService.getHistory(this.propertyId);
+        const fileURL = history[r.revisionIndex]?.fileURL;
+        if (r.isCurrent) {
+          this.verdict.set({ kind: 'ok', msg: `AUTHENTIC & CURRENT — matches revision #${r.revisionIndex}, the latest.`, fileURL });
+        } else {
+          this.verdict.set({ kind: 'warn', msg: `OUTDATED — matches revision #${r.revisionIndex}, but a newer revision exists. Get the latest version.`, fileURL });
+        }
       }
     } catch (e: any) {
       this.verdict.set({ kind: 'err', msg: e?.shortMessage ?? e?.message ?? 'Verification failed' });

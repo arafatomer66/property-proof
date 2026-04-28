@@ -1,0 +1,94 @@
+@use '../../shared/page.scss';
+
+.page.wide {
+  max-width: 960px;
+}
+
+.apps {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.app-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 1.1rem 1.3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.app-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+}
+
+.app-head strong {
+  font-size: 1.1rem;
+}
+
+.badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+}
+
+.badge.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.badge.approved {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.badge.rejected {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.app-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.88rem;
+  color: #1f2937;
+  border-bottom: 1px solid #f3f4f6;
+  padding-bottom: 0.4rem;
+}
+
+.app-row span:first-child {
+  color: #6b7280;
+  font-weight: 500;
+  min-width: 110px;
+}
+
+.app-row code {
+  font-family: ui-monospace, Menlo, monospace;
+  word-break: break-all;
+}
+
+.reason {
+  text-align: right;
+  font-style: italic;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+button.approve {
+  background: #16a34a;
+}
+
+button.reject {
+  background: #dc2626;
+}

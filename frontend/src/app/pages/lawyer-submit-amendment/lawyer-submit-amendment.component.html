@@ -1,0 +1,36 @@
+<section class="page">
+  <h2>Submit amendment <span class="lawyer-badge">Lawyer</span></h2>
+  <p class="hint">Submit a new revision for an already-registered property. The registrar will review and approve.</p>
+
+  <label class="field">
+    <span>Property ID</span>
+    <input type="text" [(ngModel)]="propertyId" placeholder="e.g. PLOT-001" />
+  </label>
+
+  <label class="field">
+    <span>Note</span>
+    <input type="text" [(ngModel)]="note" placeholder="e.g. Mutation after sale" />
+  </label>
+
+  <label class="field">
+    <span>Updated document</span>
+    <input type="file" (change)="onFileChange($event)" />
+  </label>
+
+  @if (fileName()) {
+    <div class="hash-row">
+      <strong>{{ fileName() }}</strong>
+      <code>{{ hash() ?? 'hashing…' }}</code>
+    </div>
+  }
+
+  <button (click)="submit()" [disabled]="busy() || !hash() || !propertyId">
+    {{ busy() ? 'Working…' : 'Submit for review' }}
+  </button>
+
+  @if (status(); as s) {
+    <div class="status" [class.ok]="s.kind === 'ok'" [class.err]="s.kind === 'err'">
+      {{ s.msg }}
+    </div>
+  }
+</section>

@@ -1,0 +1,29 @@
+<section class="page wide">
+  <h2>Registrar dashboard</h2>
+  <p class="hint">Welcome, registrar. Here's what's awaiting your review.</p>
+
+  @if (busy()) {
+    <div class="status">Loading…</div>
+  }
+  @if (error()) {
+    <div class="status err">{{ error() }}</div>
+  }
+
+  <div class="cards">
+    <a routerLink="/admin/lawyer-applications" class="metric-card">
+      <span class="num">{{ pendingApps().length }}</span>
+      <span class="label">Lawyer applications</span>
+      <small>Pending review</small>
+    </a>
+    <a routerLink="/admin/pending-submissions" class="metric-card">
+      <span class="num">{{ pendingSubmissions().length }}</span>
+      <span class="label">Property submissions</span>
+      <small>Awaiting approval</small>
+    </a>
+    <a routerLink="/admin/register" class="metric-card alt">
+      <span class="num">+</span>
+      <span class="label">Register property</span>
+      <small>Direct admin write</small>
+    </a>
+  </div>
+</section>

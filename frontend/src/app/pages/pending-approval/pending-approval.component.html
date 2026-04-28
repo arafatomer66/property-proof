@@ -1,0 +1,38 @@
+<section class="page">
+  <h2>Application status</h2>
+  <p class="hint">
+    Your lawyer application has been submitted to the registrar's office.
+    You'll gain submission powers once an admin approves it on-chain.
+  </p>
+
+  @if (busy()) {
+    <div class="status">Loading…</div>
+  }
+
+  @if (error()) {
+    <div class="status err">{{ error() }}</div>
+  }
+
+  @if (app(); as a) {
+    <div class="card">
+      <div class="row">
+        <span class="label">Status</span>
+        <span class="badge" [class.pending]="a.status === 'pending'" [class.approved]="a.status === 'approved'" [class.rejected]="a.status === 'rejected'">
+          {{ a.status | uppercase }}
+        </span>
+      </div>
+      <div class="row"><span class="label">Full name</span><span>{{ a.fullName }}</span></div>
+      <div class="row"><span class="label">Bar number</span><span>{{ a.barLicenseNumber }}</span></div>
+      <div class="row"><span class="label">Jurisdiction</span><span>{{ a.jurisdiction }}</span></div>
+      <div class="row"><span class="label">Submitted</span><span>{{ formatDate(a.submittedAt) }}</span></div>
+      @if (a.status === 'rejected' && a.rejectReason) {
+        <div class="row reject"><span class="label">Reject reason</span><span>{{ a.rejectReason }}</span></div>
+      }
+    </div>
+
+    <button (click)="refresh()">Check status again</button>
+    <a routerLink="/" class="back-link">← Back to public site</a>
+  } @else if (!busy()) {
+    <div class="status err">No application on file. <a routerLink="/signup">Apply now</a>.</div>
+  }
+</section>
